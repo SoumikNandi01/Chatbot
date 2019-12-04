@@ -4,18 +4,16 @@ nmt-chatbot
 Table of Contents
 -------------
 1. [Introduction](#introduction)
-2. [Setup](#setup)
-3. [Custom summary values (evaluation)](#custom-summary-values-evaluation)
-4. [Standard vs BPE/WPM-like (subword) tokenization, embedded detokenizer](#standard-vs-bpewpm-like-subword-tokenization-embedded-detokenizer)
-5. [Rules files](#rules-files)
-6. [Tests](#tests)
-7. [More detailed information about training a model](#more-detailed-information-about-training-a-model)
-8. [Utils](#utils)
-9. [Inference](#inference)
-10. [Importing nmt-chatbot](#importing-nmt-chatbot)
-11. [Deploying chatbot/model](#deploying-chatbotmodel)
-12. [Demo chatbot](#demo-chatbot)
-13. [Changelog](#changelog)
+2. [Custom summary values (evaluation)](#custom-summary-values-evaluation)
+3. [Standard vs BPE/WPM-like (subword) tokenization, embedded detokenizer](#standard-vs-bpewpm-like-subword-tokenization-embedded-detokenizer)
+4. [Rules files](#rules-files)
+5. [Tests](#tests)
+6. [More detailed information about training a model](#more-detailed-information-about-training-a-model)
+7. [Utils](#utils)
+8. [Inference](#inference)
+9. [Importing nmt-chatbot](#importing-nmt-chatbot)
+10. [Demo chatbot](#demo-chatbot)
+11. [Changelog](#changelog)
 
 Introduction
 -------------
@@ -25,31 +23,6 @@ nmt-chatbot is the implementation of chatbot using NMT - Neural Machine Translat
 The code is built on top of NMT but because of lack of available interfaces, some things are "hacked", and parts of the code had to be copied into that project (and will have to be maintained to follow changes in NMT).
 
 This project forks NMT. We had to make a change in our code allowing the use of a stable TensorFlow (1.4) version. Doing so allowed us also to fix some bug before official patch as well as do couple of necessary changes.
-
-
-
-Setup
--------------
-
-Steps to setup project for your needs:
-It is *highly* recommended that you use Python 3.6+. Python 3.4 and 3.5 is likely to work in Linux, but you will eventually hit encoding errors with 3.5 or lower in a Windows environment.
-
-If you want to use exactly what's in tutorial made by Sentdex, use v0.1 tag. There are multiple changes after last part of tutorial.
-
- 1. ```$ git clone --recursive https://github.com/daniel-kukiela/nmt-chatbot```  
-    (or)  
-    ```$ git clone --branch v0.1 --recursive https://github.com/daniel-kukiela/nmt-chatbot.git``` (for a version featured in Sentdex tutorial)
- 2. ```$ cd nmt-chatbot```
- 3. ```$ pip install -r requirements.txt``` TensorFlow-GPU is one of the requirements. You also need CUDA Toolkit 8.0 and cuDNN 6.1. (Windows tutorial: https://www.youtube.com/watch?v=r7-WPbx8VuY  Linux tutorial: https://pythonprogramming.net/how-to-cuda-gpu-tensorflow-deep-learning-tutorial/)
- 4. ```$ cd setup```
- 5. (optional) edit settings.py to your liking. These are a decent starting point for ~4GB of VRAM, you should first start by trying to raise vocab if you can. 
- 6. (optional) Edit text files containing rules in the setup directory.
- 7. Place training data inside "new_data" folder (train.(from|to), tst2013.(from|to), tst2013(from|to)). We have provided some sample data for those who just want to do a quick test drive.
- 8. ```$ python prepare_data.py``` ...Run setup/prepare_data.py - a new folder called "data" will be created with prepared training data
- 9. ```$ cd ../```
- 10. ```$ python train.py``` Begin training
-
-Version 0.3 introduces epoch-based training including custom (epoch-based as well) decaying scheme - refer to `preprocessing['epochs']` in `setup/settings.py` for more detailed explanation and example (enabled by default).
 
 
 
@@ -230,30 +203,12 @@ With a list of questions, the function will return a list of dictionaries.
 For every empty question, the function will return `None` instead of result dictionary.
 
 
-
-Deploying chatbot/model
------------------------
-
-Whether model is trained, there might be a need to export only files necessary for interference (for example to be embeded and imported it other project).
-
-That might be achieved automatically by using `prepare_for_deployment` utility:
-
-    cd utils
-    python prepare_for_deployment.py
-
-Script will create `_deployment` folder inside project's root directory and copy all necessary files depending on your current settings.
-
-
-
 Demo chatbot
 ------------
 
 We have trained demo model. It's deployment-ready package.
 
 As it's a demo model, it was trained on small data-set (corpus) of one million pairs and using relatively small neural network. It is not a decent model, but good enough to try it and see how it's working.
-
-You can download package [here](https://www.dropbox.com/s/2w4i77fancf4voc/nmt_chatbot.zip?dl=0). It includes all but also only necessary files to run inference (doesn't include training corpus for example). All model settings can be found in `setup/setting.py` file.
-
 
 Changelog
 ---------
@@ -277,17 +232,5 @@ Changelog
 - Updated `NMT` fork (fixed `train_ppl` graph, added evaluation outputs saved to a separate files, added ability to pass custom evaluation callback function)
 - Merged latest `NMT` changes into our fork
 - Various fixes and other small improvements
-
-### v0.2
-- BPE/WPM-like tokenizer
-- Updated NMT
-- Enabled NMT's SMP detokenizer with our embedded BPE/WPM-like tokenizer
-- Fixed issue with paths on Linux and MacOS machines
-- Improved pair testing utility
-- Fixed command for tag cloning
-- Various fixes and other small improvements, improved readme file
-
-### v0.1
-- Initial commit, code for tutorial: https://pythonprogramming.net/chatbot-deep-learning-python-tensorflow/
 
 ----------
